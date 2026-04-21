@@ -12,66 +12,19 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            /* 让加载界面居中 */
-            flex-direction: column;
         }
         #tuanjie-canvas {
             display: block;
             background: #231F20;
         }
-        /* --- 新增：进度条样式 --- */
-        #loading-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-        }
-        #progress-bar-background {
-            width: 60%;
-            height: 10px;
-            background: #333;
-            border-radius: 5px;
-            overflow: hidden;
-            margin-top: 20px;
-        }
-        #progress-bar-fill {
-            height: 100%;
-            width: 0%;
-            background: #fff;
-            transition: width 0.2s ease;
-        }
-        #loading-text {
-            color: #fff;
-            font-family: Arial;
-            margin-top: 10px;
-        }
     </style>
 </head>
 <body>
-    <!-- --- 新增：进度条 HTML 结构 --- -->
-    <div id="loading-overlay">
-        <div id="progress-bar-background">
-            <div id="progress-bar-fill"></div>
-        </div>
-        <div id="loading-text">Loading... 0%</div>
-    </div>
-
     <canvas id="tuanjie-canvas" width="540" height="960" tabindex="-1"></canvas>
 
     <script src="Build/web_3.loader.js"></script>
     <script>
         var canvas = document.querySelector("#tuanjie-canvas");
-        // --- 新增：获取进度条元素 ---
-        var loadingOverlay = document.querySelector("#loading-overlay");
-        var progressBarFill = document.querySelector("#progress-bar-fill");
-        var loadingText = document.querySelector("#loading-text");
 
         if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
             var meta = document.createElement('meta');
@@ -87,7 +40,6 @@
             document.body.style.display = "block";
         }
 
-        // --- 核心修改：添加 onProgress 回调 ---
         createTuanjieInstance(canvas, {
             dataUrl: "Build/web_3.data.unityweb",
             frameworkUrl: "Build/web_3.framework.js.unityweb",
@@ -96,18 +48,6 @@
             companyName: "zpcompany",
             productName: "plane attack",
             productVersion: "0.1",
-            // 监听加载进度
-            onProgress: function(progress) {
-                // 更新进度条宽度
-                var percentage = Math.round(progress * 100);
-                progressBarFill.style.width = percentage + "%";
-                loadingText.textContent = "Loading... " + percentage + "%";
-
-                // 加载完成 (progress = 1)，隐藏进度条
-                if (progress >= 1) {
-                    loadingOverlay.style.display = "none";
-                }
-            }
         });
     </script>
 </body>
